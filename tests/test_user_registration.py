@@ -1,7 +1,4 @@
 import pytest
-import sys
-sys.path.append('.')
-
 from app.services.user_service import register_user
 
 
