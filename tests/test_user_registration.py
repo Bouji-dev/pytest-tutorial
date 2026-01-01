@@ -5,15 +5,19 @@ import pytest
 from app.services.user_service import register_user
 
 class FakeUserRepository:
+    def __init__(self, exists=False):
+        self._exists = exists
+
     def email_exists(self, email):
-        return True
-    
-# repo = FakeUserRepository()
+        return self._exists
 
 @pytest.fixture
 def duplicate_email_repo():
-    return FakeUserRepository()
+    return FakeUserRepository(exists=True)
 
+@pytest.fixture
+def new_email_repo():
+    return FakeUserRepository(exists=False)
 
 def test_register_user_with_invalid_email_should_fail(duplicate_email_repo):
     with pytest.raises(ValueError):
@@ -27,3 +31,5 @@ def test_register_user_with_exists_email_should_fail(duplicate_email_repo):
     with pytest.raises(ValueError):
         register_user('user@test.com', '12345678', duplicate_email_repo)
 
+def test_register_user_with_new_email_should_pass(new_email_repo):
+    register_user('user@test.com', '12345678', new_email_repo)
