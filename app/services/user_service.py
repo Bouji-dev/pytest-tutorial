@@ -1,6 +1,3 @@
-
-
-
 def register_user(email, password, user_repository):
     if "@" not in email:
         raise ValueError('Invalid email')
